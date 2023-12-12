@@ -1,12 +1,12 @@
+static NUMBER_CHARS: [&str; 10] = [
+    "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten",
+];
 
-static NUMBER_CHARS: [&str; 10] =["one","two","three","four","five","six","seven","eight","nine","ten"];
-
-
-pub fn assignment_a(file_contents:String) {
+pub fn assignment_a(file_contents: String) {
     let mut found_numbers = vec![];
-    for line in file_contents.lines(){
+    for line in file_contents.lines() {
         let mut line_list = vec![];
-        for character in line.chars(){
+        for character in line.chars() {
             if character.is_numeric() {
                 line_list.push(character)
             }
@@ -22,9 +22,7 @@ pub fn assignment_a(file_contents:String) {
             println!("Vector is empty");
         }
     }
-    let sum: u32 = found_numbers
-        .iter()
-        .sum();
+    let sum: u32 = found_numbers.iter().sum();
     println!("1-A: total number = {sum}")
 }
 
@@ -37,8 +35,8 @@ fn convert_string_to_u32(s: &str) -> Option<u32> {
     }
 }
 
-pub fn assignment_b(file_contents:String){
-    let mut found_numbers:Vec<u32> = vec![];
+pub fn assignment_b(file_contents: String) {
+    let mut found_numbers: Vec<u32> = vec![];
     for line in file_contents.lines() {
         let first = find_first_number(line);
         let second = find_last_number(line);
@@ -49,19 +47,15 @@ pub fn assignment_b(file_contents:String){
                 found_numbers.push(combined_integer);
             } else {
                 println!("Failed to convert to u32");
-                break
-
+                break;
             }
-
         }
     }
     count_numbers_from_list(found_numbers);
 }
 
-fn count_numbers_from_list(found_numbers:Vec<u32>){
-    let sum: u32 = found_numbers
-        .iter()
-        .sum();
+fn count_numbers_from_list(found_numbers: Vec<u32>) {
+    let sum: u32 = found_numbers.iter().sum();
     println!("1-B: total number = {sum}")
 }
 
@@ -71,9 +65,9 @@ fn find_first_number(line: &str) -> Option<u32> {
         collected_chars.push(character);
         if character.is_numeric() {
             return character.to_digit(10);
-        } else{
-            for char_number in NUMBER_CHARS{
-                if collected_chars.contains(char_number){
+        } else {
+            for char_number in NUMBER_CHARS {
+                if collected_chars.contains(char_number) {
                     return convert_string_to_u32(char_number);
                 }
             }
@@ -87,9 +81,9 @@ fn find_last_number(line: &str) -> Option<u32> {
         collected_chars.insert(0, character);
         if character.is_numeric() {
             return character.to_digit(10);
-        } else{
-            for char_number in NUMBER_CHARS{
-                if collected_chars.contains(char_number){
+        } else {
+            for char_number in NUMBER_CHARS {
+                if collected_chars.contains(char_number) {
                     return convert_string_to_u32(char_number);
                 }
             }
