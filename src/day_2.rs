@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-pub fn day_2_a(file_contents: String) {
+pub fn day_2_a(file_contents: String) -> u32{
     let predicted_blocks_dict: HashMap<&'static str, u32> = setup();
     // let file_contents = read_file();
     let mut total_score: u32 = 0;
@@ -14,8 +14,9 @@ pub fn day_2_a(file_contents: String) {
         }
     }
     println!("2-A: total number = {:?}", total_score);
+    total_score
 }
-pub fn day_2_b(file_contents: String) {
+pub fn day_2_b(file_contents: String) ->u32 {
     // let file_contents = read_file();
     let mut total_number: u32 = 0;
     for (_index, line) in file_contents.lines().enumerate() {
@@ -23,7 +24,8 @@ pub fn day_2_b(file_contents: String) {
         let subset_number = calc_minimum_set(cleaned_string);
         total_number += subset_number;
     }
-    println!("2-B: total number = {:?}", total_number)
+    println!("2-B: total number = {:?}", total_number);
+    total_number
 }
 
 fn calc_minimum_set(cleaned_string: String) -> u32 {

@@ -101,7 +101,7 @@ fn is_digit(c: char) -> bool {
     c.is_digit(10) && c.is_ascii_digit()
 }
 
-pub fn day_3_a(file_contents: String) {
+pub fn day_3_a(file_contents: String) -> u32 {
     let file_list = file_contents.lines();
     let mut total_sum: u32 = 0;
     for (index_row, file_line) in file_list.clone().enumerate() {
@@ -128,7 +128,8 @@ pub fn day_3_a(file_contents: String) {
             }
         }
     }
-    println!("3-A: total number = {:?}", total_sum)
+    println!("3-A: total number = {:?}", total_sum);
+    total_sum
 }
 
 fn find_star_around_numbers(
@@ -192,7 +193,7 @@ fn check_star_around(
     }
 }
 
-pub fn day_3_b(file_contents: String) {
+pub fn day_3_b(file_contents: String)-> u32 {
     let mut found_number_index: HashMap<String, Vec<u32>> = HashMap::new();
     for (index_row, file_line) in file_contents.lines().enumerate() {
         let mut chars_iter = file_line.chars().enumerate().peekable();
@@ -242,4 +243,5 @@ pub fn day_3_b(file_contents: String) {
         }
     }
     println!("3-B: total number = {:?}", total_number);
+    total_number
 }
