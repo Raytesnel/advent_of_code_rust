@@ -1,5 +1,4 @@
 use std::collections::HashMap;
-use std::fmt::format;
 use std::iter::{Enumerate, Peekable};
 use std::str::Chars;
 
@@ -193,15 +192,16 @@ fn check_star_around(
     }
 }
 
-pub fn day_3_b(file_contents: String){
-    let mut total_sum: u32 = 0;
-    let mut found_number_index: HashMap<String,Vec<u32>> = HashMap::new();
+pub fn day_3_b(file_contents: String) {
+    let mut found_number_index: HashMap<String, Vec<u32>> = HashMap::new();
     for (index_row, file_line) in file_contents.lines().enumerate() {
         let mut chars_iter = file_line.chars().enumerate().peekable();
+
         while let Some((index_char, file_item)) = chars_iter.next() {
             if is_digit(file_item) {
                 let (numbers_around_symbol, index_number) =
                     get_all_number_series(index_char, file_item, &mut chars_iter);
+
                 match check_star_around(
                     &file_contents,
                     index_char,
@@ -210,26 +210,15 @@ pub fn day_3_b(file_contents: String){
                     numbers_around_symbol,
                 ) {
                     Ok(result) => {
-                        // println!("index symbol row: {:?} column: {:?} with number {:?}",result.1.0,result.1.1,result.0);
                         let combination = format!("{:?}:{:?}", result.1.0, result.1.1);
-                        if found_number_index.contains_key(&*combination){
-                            println!("found a double: at {:?}:{:?} with numbers, (new) {:?} and (old){:?}", result.1.0, result.1.1,result.0,found_number_index.get(&*combination));
-                            let mut number_multiplied =match found_number_index.get(&*combination){
-                                Some(&number) => number,
-                                None => {0
-                                    // Handle the case when the combination is not found in the HashMap
-                                    // You might want to return an error, provide a default value, or handle it in some way
-                                    // For example, you can return an Err or use unwrap_or(default_value)
-                                }
-                            };
-                            found_number_index.insert(combination,number_multiplied.push(result.0));
-                        }
-                        else{
+
+                        if let Some(numbers) = found_number_index.get_mut(&combination) {
+                            // If the combination already exists, push the new number
+                            numbers.push(result.0);
+                        } else {
+                            // If the combination doesn't exist, create a new vector
                             found_number_index.insert(combination, vec![result.0]);
                         }
-                        // aanamen dat het altijd maar 2 getallen zijn om de * en geen 3 +
-
-                        // total_sum += result.0;
                     }
                     Err(error) => {
                         if !error.contains("Symbol not found") {
@@ -240,5 +229,17 @@ pub fn day_3_b(file_contents: String){
             }
         }
     }
-    println!("3-B: total number = {:?}", found_number_index.values())
+
+    // Print the content of the HashMap
+    let mut total_number:u32 =0;
+    for (_, numbers) in &found_number_index {
+        if numbers.len()>1{
+            let mut temp_number:u32 = 1;
+            for &number in numbers{
+                temp_number = temp_number*number;
+            }
+            total_number += temp_number;
+        }
+    }
+    println!("3-B: total number = {:?}", total_number);
 }
