@@ -9,7 +9,8 @@ fn main() {
     day_1::assignment_b(read_file("src/input_data/input_day_1.txt"));
     day_2::day_2_a(read_file("src/input_data/input_day_2.txt"));
     day_2::day_2_b(read_file("src/input_data/input_day_2.txt"));
-    day_3::day_3_a(read_file("src/input_data/input_day_3.txt"))
+    day_3::day_3_a(read_file("src/input_data/input_day_3.txt"));
+    day_3::day_3_b(read_file("src/input_data/input_day_3.txt"));
 }
 
 fn read_file(input_path: &str) -> String {
