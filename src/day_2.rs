@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-pub fn day_2_a(file_contents: String) -> u32{
+pub fn day_2_a(file_contents: String) -> u32 {
     let predicted_blocks_dict: HashMap<&'static str, u32> = setup();
     // let file_contents = read_file();
     let mut total_score: u32 = 0;
@@ -16,7 +16,7 @@ pub fn day_2_a(file_contents: String) -> u32{
     println!("2-A: total number = {:?}", total_score);
     total_score
 }
-pub fn day_2_b(file_contents: String) ->u32 {
+pub fn day_2_b(file_contents: String) -> u32 {
     // let file_contents = read_file();
     let mut total_number: u32 = 0;
     for (_index, line) in file_contents.lines().enumerate() {

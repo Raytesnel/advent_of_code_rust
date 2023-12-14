@@ -2,7 +2,7 @@ static NUMBER_CHARS: [&str; 10] = [
     "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten",
 ];
 
-pub fn assignment_a(file_contents: String) -> u32{
+pub fn assignment_a(file_contents: String) -> u32 {
     let mut found_numbers = vec![];
     for line in file_contents.lines() {
         let mut line_list = vec![];
@@ -36,7 +36,7 @@ fn convert_string_to_u32(s: &str) -> Option<u32> {
     }
 }
 
-pub fn assignment_b(file_contents: String) -> u32{
+pub fn assignment_b(file_contents: String) -> u32 {
     let mut found_numbers: Vec<u32> = vec![];
     for line in file_contents.lines() {
         let first = find_first_number(line);
@@ -54,10 +54,9 @@ pub fn assignment_b(file_contents: String) -> u32{
     }
     let sum = count_numbers_from_list(found_numbers);
     sum
-
 }
 
-fn count_numbers_from_list(found_numbers: Vec<u32>) -> u32{
+fn count_numbers_from_list(found_numbers: Vec<u32>) -> u32 {
     let sum: u32 = found_numbers.iter().sum();
     println!("1-B: total number = {sum}");
     sum

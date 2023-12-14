@@ -137,7 +137,7 @@ fn find_star_around_numbers(
     start_index: usize,
     end_index: usize,
     index_row: usize,
-) -> Result<(usize,usize), &'static str> {
+) -> Result<(usize, usize), &'static str> {
     // Define the range to check for symbols (e.g., row 0 till 2 with index 2 till 6)
     let symbol_start = start_index.saturating_sub(1);
     let symbol_end = end_index.saturating_add(1);
@@ -164,16 +164,15 @@ fn find_star_around_numbers(
         {
             if is_star_symbol(&symbol_candidate) {
                 // println!("found symbol next to number at {:?} : {:?} with symbol {:?} in combination with",start_row+index_row,symbol_start+index_char,symbol_candidate);
-                return Ok((start_row+index_row,symbol_start+index_char));
+                return Ok((start_row + index_row, symbol_start + index_char));
             }
         }
     }
 
     // Iterate over the specified range to find a symbol
 
-    return Err("Symbol not found")
+    return Err("Symbol not found");
 }
-
 
 fn check_star_around(
     file_contents: &String,
@@ -181,19 +180,17 @@ fn check_star_around(
     index_number: usize,
     index_row: usize,
     numbers_around_symbol: String,
-) -> Result<(u32,(usize,usize)), String> {
+) -> Result<(u32, (usize, usize)), String> {
     match find_star_around_numbers(file_contents, index_char, index_number, index_row) {
-        Ok(symbol_index) => {
-            match numbers_around_symbol.parse::<u32>() {
-                Ok(combined_integer) => Ok((combined_integer, symbol_index)),
-                Err(_) => Err("Failed to convert to u32".to_string()),
-            }
-        }
+        Ok(symbol_index) => match numbers_around_symbol.parse::<u32>() {
+            Ok(combined_integer) => Ok((combined_integer, symbol_index)),
+            Err(_) => Err("Failed to convert to u32".to_string()),
+        },
         Err(error) => Err(error.to_string()),
     }
 }
 
-pub fn day_3_b(file_contents: String)-> u32 {
+pub fn day_3_b(file_contents: String) -> u32 {
     let mut found_number_index: HashMap<String, Vec<u32>> = HashMap::new();
     for (index_row, file_line) in file_contents.lines().enumerate() {
         let mut chars_iter = file_line.chars().enumerate().peekable();
@@ -211,7 +208,7 @@ pub fn day_3_b(file_contents: String)-> u32 {
                     numbers_around_symbol,
                 ) {
                     Ok(result) => {
-                        let combination = format!("{:?}:{:?}", result.1.0, result.1.1);
+                        let combination = format!("{:?}:{:?}", result.1 .0, result.1 .1);
 
                         if let Some(numbers) = found_number_index.get_mut(&combination) {
                             // If the combination already exists, push the new number
@@ -230,14 +227,16 @@ pub fn day_3_b(file_contents: String)-> u32 {
             }
         }
     }
-
+    sum_multiply_hasmap_values(found_number_index)
+}
+fn sum_multiply_hasmap_values(found_number_index: HashMap<String, Vec<u32>>) -> u32 {
     // Print the content of the HashMap
-    let mut total_number:u32 =0;
+    let mut total_number: u32 = 0;
     for (_, numbers) in &found_number_index {
-        if numbers.len()>1{
-            let mut temp_number:u32 = 1;
-            for &number in numbers{
-                temp_number = temp_number*number;
+        if numbers.len() > 1 {
+            let mut temp_number: u32 = 1;
+            for &number in numbers {
+                temp_number = temp_number * number;
             }
             total_number += temp_number;
         }
