@@ -1,6 +1,7 @@
 mod day_1;
 mod day_2;
 mod day_3;
+mod day_4;
 
 use std::fs;
 
@@ -11,6 +12,7 @@ fn main() {
     day_2::day_2_b(read_file("src/input_data/input_day_2.txt"));
     day_3::day_3_a(read_file("src/input_data/input_day_3.txt"));
     day_3::day_3_b(read_file("src/input_data/input_day_3.txt"));
+    day_4::day_4_a(read_file("src/input_data/day_4/puzzle_input.txt"));
 }
 
 fn read_file(input_path: &str) -> String {
