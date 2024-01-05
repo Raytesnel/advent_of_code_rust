@@ -10,6 +10,26 @@ static SEED_ORDER: [&str; 7] = [
     "humidity-to-location",
 ];
 
+fn get_destination_number(
+    items_dict: &HashMap<String, Vec<Vec<u32>>>,
+    key: &str,
+    number: u32,
+) -> u32 {
+    match is_number_in_range(&items_dict, &key, number.clone()) {
+        Ok(number_returned) => {
+            if let Some(entry) = items_dict.get(key) {
+                let number_returned_usize = number_returned as usize;
+                let start_number_source = entry[number_returned_usize][1];
+                let start_number_dest = entry[number_returned_usize][0];
+                let delta = number - start_number_source;
+                return start_number_dest + delta;
+            }
+        }
+        Err(_) => return number,
+    }
+    number
+}
+
 fn is_number_in_range(
     items_dict: &HashMap<String, Vec<Vec<u32>>>,
     key: &str,
@@ -187,7 +207,12 @@ mod tests {
         let key_to_find = "seed-to-soil";
         let number: u32 = 60;
         let number_found = is_number_in_range(&example_input_split, key_to_find, number);
-        assert_eq!(number_found.unwrap(), 0);
+        let key_to_find = "seed-to-soil";
+        let number: u32 = 5;
+        match is_number_in_range(&example_input_split, key_to_find, number) {
+            Ok(_) => assert!(false),
+            Err(_) => assert!(true),
+        }
         let key_to_find = "fertilizer-to-water";
         let number: u32 = 60;
         let number_found = is_number_in_range(&example_input_split, key_to_find, number);
@@ -196,6 +221,17 @@ mod tests {
         let number: u32 = 64;
         let number_found = is_number_in_range(&example_input_split, key_to_find, number);
         assert_eq!(number_found.unwrap(), 1)
+    }
+
+    #[rstest]
+    fn test_return_destination(example_input_split: HashMap<String, Vec<Vec<u32>>>) {
+        let key_to_find = "fertilizer-to-water";
+        let number: u32 = 60;
+        let new_number = get_destination_number(&example_input_split, key_to_find, number);
+        assert_eq!(new_number, 56);
+        let number: u32 = 70;
+        let new_number = get_destination_number(&example_input_split, key_to_find, number);
+        assert_eq!(new_number, 70)
     }
 
     // #[fixture]
