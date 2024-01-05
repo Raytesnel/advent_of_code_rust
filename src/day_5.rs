@@ -25,7 +25,6 @@ fn is_number_in_range(
             }
         }
     }
-    println!("nothing found");
     Err("nothing found".to_string()) // Number is not in any range
 }
 fn get_destination_number(
@@ -41,7 +40,6 @@ fn get_destination_number(
             }
         }
         Err(_) => {
-            println!("couldn't find number {:?} in range", number);
             return *number;
         }
     }
@@ -56,7 +54,6 @@ fn follow_seed(input_dict: &HashMap<String, Vec<Vec<i64>>>, seed_number: &i64) -
         previous_number = next_number;
     }
 
-    println!("loop stopped {:?}", next_number);
     next_number
 }
 
@@ -127,7 +124,7 @@ pub fn day_5_a(file_contents: String) -> i64 {
 
             for seed in seeds {
                 let location = follow_seed(&mapped_input, &seed);
-                println!("with given seed:{:?} given location{:?}", seed, location);
+                println!("with given seed: {:?} given location: {:?}", seed, location);
                 seed_locations.insert(seed, location);
             }
 
