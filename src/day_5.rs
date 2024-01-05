@@ -10,6 +10,24 @@ static SEED_ORDER: [&str; 7] = [
     "humidity-to-location",
 ];
 
+fn is_number_in_range(
+    items_dict: &HashMap<String, Vec<Vec<u32>>>,
+    key: &str,
+    number: u32,
+) -> Result<u32, String> {
+    if let Some(entry) = items_dict.get(key) {
+        for (index, range) in entry.iter().enumerate() {
+            let start = range[1];
+            let end = range[1] + range[2] - 1;
+
+            if number >= start && number <= end {
+                return Ok(index as u32); // Number is within the range
+            }
+        }
+    }
+    Err("nothing found".to_string()) // Number is not in any range
+}
+
 fn retrieve_seeds(line: &str) -> Result<Vec<u32>, &'static str> {
     if let Some(first_line) = line.lines().next() {
         if first_line.contains("seeds") {
@@ -53,7 +71,7 @@ fn split_mapping_from_line(multiline_string: &String) -> HashMap<String, Vec<Vec
     let mut updated_dict: HashMap<String, Vec<Vec<u32>>> = HashMap::new();
     for (key, values) in items_dict.clone().into_iter() {
         let mut sorted_values = values;
-        sorted_values.sort_by_key(|inner_vec| inner_vec[0]);
+        sorted_values.sort_by_key(|inner_vec| inner_vec[1]);
         updated_dict.insert(key, sorted_values);
     }
 
@@ -114,36 +132,36 @@ mod tests {
         let mut items_dict: HashMap<String, Vec<Vec<u32>>> = HashMap::new();
         items_dict.insert(
             "seed-to-soil".to_string(),
-            vec![vec![50, 98, 2], vec![52, 50, 48]],
+            vec![vec![52, 50, 48], vec![50, 98, 2]],
         );
         items_dict.insert(
             "soil-to-fertilizer".to_string(),
-            vec![vec![0, 15, 37], vec![37, 52, 2], vec![39, 0, 15]],
+            vec![vec![39, 0, 15], vec![0, 15, 37], vec![37, 52, 2]],
         );
         items_dict.insert(
             "fertilizer-to-water".to_string(),
             vec![
-                vec![0, 11, 42],
                 vec![42, 0, 7],
-                vec![49, 53, 8],
                 vec![57, 7, 4],
+                vec![0, 11, 42],
+                vec![49, 53, 8],
             ],
         );
         items_dict.insert(
             "water-to-light".to_string(),
-            vec![vec![18, 25, 70], vec![88, 18, 7]],
+            vec![vec![88, 18, 7], vec![18, 25, 70]],
         );
         items_dict.insert(
             "light-to-temperature".to_string(),
-            vec![vec![45, 77, 23], vec![68, 64, 13], vec![81, 45, 19]],
+            vec![vec![81, 45, 19], vec![68, 64, 13], vec![45, 77, 23]],
         );
         items_dict.insert(
             "temperature-to-humidity".to_string(),
-            vec![vec![0, 69, 1], vec![1, 0, 69]],
+            vec![vec![1, 0, 69], vec![0, 69, 1]],
         );
         items_dict.insert(
             "humidity-to-location".to_string(),
-            vec![vec![56, 93, 4], vec![60, 56, 37]],
+            vec![vec![60, 56, 37], vec![56, 93, 4]],
         );
         items_dict
     }
@@ -164,63 +182,27 @@ mod tests {
         }
     }
 
-    #[fixture]
-    fn range_mapping() {
-        let mut items_dict: HashMap<String, Vec<Vec<u32>>> = HashMap::new();
-
-        // let mut seed_to_soil: HashMap<u32, u32> = HashMap::new();
-        // for i in 0..50 {
-        //     seed_to_soil.insert(i, i);
-        // }
-        // for i in 50..98 {
-        //     seed_to_soil.insert(i, i + 2)
-        // }
-        // for i in 98..100 {
-        //     seed_to_soil.insert(i, i - 48)
-        // }
-
-        items_dict.insert(
-            "seed-to-soil".to_string(),
-            vec![vec![50, 98, 2], vec![52, 50, 48]],
-        );
-
-        items_dict.insert(
-            "soil-to-fertilizer".to_string(),
-            vec![vec![0, 15, 37], vec![37, 52, 2], vec![39, 0, 15]],
-        );
-        items_dict.insert(
-            "fertilizer-to-water".to_string(),
-            vec![
-                vec![49, 53, 8],
-                vec![0, 11, 42],
-                vec![42, 0, 7],
-                vec![57, 7, 4],
-            ],
-        );
-        items_dict.insert(
-            "water-to-light".to_string(),
-            vec![vec![88, 18, 7], vec![18, 25, 70]],
-        );
-        items_dict.insert(
-            "light-to-temperature".to_string(),
-            vec![vec![45, 77, 23], vec![81, 45, 19], vec![68, 64, 13]],
-        );
-        items_dict.insert(
-            "temperature-to-humidity".to_string(),
-            vec![vec![0, 69, 1], vec![1, 0, 69]],
-        );
-        items_dict.insert(
-            "humidity-to-location".to_string(),
-            vec![vec![60, 56, 37], vec![56, 93, 4]],
-        );
-        // return items_dict
+    #[rstest]
+    fn test_if_number_is_in_range(example_input_split: HashMap<String, Vec<Vec<u32>>>) {
+        let key_to_find = "seed-to-soil";
+        let number: u32 = 60;
+        let number_found = is_number_in_range(&example_input_split, key_to_find, number);
+        assert_eq!(number_found.unwrap(), 0);
+        let key_to_find = "fertilizer-to-water";
+        let number: u32 = 60;
+        let number_found = is_number_in_range(&example_input_split, key_to_find, number);
+        assert_eq!(number_found.unwrap(), 3);
+        let key_to_find = "light-to-temperature";
+        let number: u32 = 64;
+        let number_found = is_number_in_range(&example_input_split, key_to_find, number);
+        assert_eq!(number_found.unwrap(), 1)
     }
 
-    #[fixture]
-    fn seed_locations() -> Vec<Vec<u32>> {
-        let seed_locations = vec![vec![79, 81], vec![14, 14], vec![55, 57], vec![13, 13]];
-        seed_locations
-    }
+    // #[fixture]
+    // fn seed_locations() -> Vec<Vec<u32>> {
+    //     let seed_locations = vec![vec![79, 81], vec![14, 14], vec![55, 57], vec![13, 13]];
+    //     seed_locations
+    // }
 
     // #[rstest]
     // fn test_find_seed_locations(
