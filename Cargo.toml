@@ -7,3 +7,4 @@ edition = "2021"
 
 [dependencies]
 rstest = "0.18.2"
+maplit = "1.0"
