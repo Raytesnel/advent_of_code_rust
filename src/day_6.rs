@@ -53,6 +53,15 @@ pub fn day_6_a(file_contents: String) -> u32 {
     total_sum
 }
 
+pub fn day_6_b() -> u64 {
+    let time = 51699878.0;
+    let distance = 377117112241505.0;
+    let (max_result, min_result) = calculate_min_max_button(&time, distance + 1.0).unwrap();
+    let delta = (max_result.floor() - min_result.ceil() + 1.0) as u64;
+    println!("6-B: total number = {:?}", delta);
+    delta
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -115,5 +124,15 @@ Distance:  9  40  200"#
             assert_eq!(delta, result, "testing the delta");
         }
         assert_eq!(total_sum, 288, "testing total sum")
+    }
+
+    #[rstest]
+    fn test_day_6_b() {
+        let time = 71530.0;
+        let distance = 940200.0;
+        let wins = 71503;
+        let (max_result, min_result) = calculate_min_max_button(&time, distance + 1.0).unwrap();
+        let delta = (max_result.floor() - min_result.ceil() + 1.0) as u32;
+        assert_eq!(wins, delta)
     }
 }
