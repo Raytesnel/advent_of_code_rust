@@ -17,6 +17,7 @@ fn main() {
     day_4::day_4_a(read_file("src/input_data/input_day_4.txt"));
     day_4::day_4_b(read_file("src/input_data/input_day_4.txt"));
     day_5::day_5_a(read_file("src/input_data/input_day_5.txt"));
+    day_6::day_6_a(read_file("src/input_data/input_day_6.txt"));
 }
 
 fn read_file(input_path: &str) -> String {
